@@ -1,0 +1,4 @@
+**/**
+!src/GasUnitTestingFramework.js
+!ut/GasUnitTestingFramework.ut.js
+!appsscript.json

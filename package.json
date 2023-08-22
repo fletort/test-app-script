@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "@types/google-apps-script": "^1.0.64",
+    "docdash": "^2.0.1",
+    "jsdoc": "^4.0.2",
+    "replace": "^1.2.2"
+  },
+  "scripts": {
+    "test": "node .\\ut\\GasUnitTestingFramework.ut.js",
+    "upload": "npx clasp push",
+    "doc": "npx jsdoc -c .jsdoc.json"
+    }
+}
