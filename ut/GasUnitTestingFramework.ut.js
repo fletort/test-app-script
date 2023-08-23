@@ -278,6 +278,8 @@ function runTests() {
   localTestMsg = "assertLogNoMatch() Logs are not present"
   underTest.assertLogNotMatch(testNoLogRegex, localTestMsg);
   assertOutput(true, localTestMsg);
+
+  process.exit(1)
 }
 
 
