@@ -6,7 +6,7 @@
     "replace": "^1.2.2"
   },
   "scripts": {
-    "test": "node .\\ut\\GasUnitTestingFramework.ut.js",
+    "test": "node ./ut/GasUnitTestingFramework.ut.js",
     "upload": "npx clasp push",
     "doc": "npx jsdoc -c .jsdoc.json"
     }
