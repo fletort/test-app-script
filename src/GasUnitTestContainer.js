@@ -1,5 +1,6 @@
 const { IGasUnitTestNotification } = require("./IGasUnitTestNotification");
 const { GasUnitTest } = require("./GasUnitTest.js");
+const { GasUnitTestNotificationManager } = require("./GasUnitTestNotificationManager");
 
 /**
  * Class that Contains test definitions or nested tests section.

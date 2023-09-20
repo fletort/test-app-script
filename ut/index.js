@@ -10,10 +10,10 @@ function runTestSuite() {
     const tt =  new GasUnitTest();
     const manager =  new GasUnitTestManager();
     GasUnitTestDefaultLoggerTest(manager);
-    //GasUnitTestContainerTest(manager);
-    //GasUnitTestManagerTest(manager);
-    //GasUnitTestNotificationManagerTest(manager);
-    //GasUnitTestTest(manager)
+    GasUnitTestContainerTest(manager);
+    GasUnitTestManagerTest(manager);
+    GasUnitTestNotificationManagerTest(manager);
+    GasUnitTestTest(manager)
     manager.execute();
 }
 
