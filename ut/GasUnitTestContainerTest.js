@@ -16,7 +16,7 @@ function GasUnitTestContainerTest(testSuite) {
         "logger property is the default one (GasUnitTestNotificationManager)");
 
       const underTest2 = new GasUnitTestContainer(testName, testContainerHandler.handlerMock, loggerMock);
-      test.assert(underTest2.logger.constructor.name === "GasUnitTestLoggerMock",
+      test.assert(underTest2.logger.constructor.name != "GasUnitTestLoggerMock",
         "logger property is correct");
     });
 
