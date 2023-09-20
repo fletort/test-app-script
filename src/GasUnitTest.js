@@ -3,27 +3,47 @@
  * inspired/forked from: https://github.com/WildH0g/UnitTestingApp/
  */
 
-/**
- * require libraries if the require method exists (outside GAS Mode)
- */
-if (typeof require !== 'undefined') {
-  const Logger = require('../mock/Logger.js');
-}
+const { GasUnitTestNotificationManager } = require("./GasUnitTestNotificationManager");
+const Logger = require("../mock/Logger");
+const { IGasUnitTestNotification } = require("./IGasUnitTestNotification");
 
 
+
+/* 
+TODO: NOtion de section (= class) pour les compteurs par class (?) et compteur globaux (voir Junit)
+TODO: Notion de template (list de) d'output , la classe mère ne garderait donc qu'un status d'execution (garder liste de test step complète en mémoire ?)
+*/
+
 /**
- * Singleton classes uses to run Unit Test.
+ * Classe uses to create Test.
+ * This class is created by the {@link GasUnitTestContainer#test test method of the GasUnitTestContainer class}. 
  */
-class GasUnitTestingFramework {
-  constructor() {
-    if (GasUnitTestingFramework.instance) return GasUnitTestingFramework.instance;
-    GasUnitTestingFramework._runningInGas.set(this, RunningContext.InsideAndOutsideGas);
-    GasUnitTestingFramework._msgPrefix.set(this, "");
-    GasUnitTestingFramework._log.set(this, console.log);
-    GasUnitTestingFramework.instance = this;
+class GasUnitTest {
+  /**
+     * Test callback type.
+     * @callback test
+     * @param {GasUnitTest} test - class used to to access to assert/test Tools.
+     * @param {...any} args - other args that can be passed to the test content.
+     */
+
+  /**
+   * Create a GasUnitTest instance (usually used but GasUnitTestContainer)
+   * @param {@} testName - Name of the Test
+   * @param {test} handler - test content, this is an handler receiving the current test as parameter 
+   * @param {IGasUnitTestNotification} logger - Logger class implementing IGasUnitTestNotification interface.
+   * @param  {...any} handlerArgs - additional parameters that must be passed to the handler when call
+   * @hideconstructor
+   */
+  constructor(testName, handler, logger=new GasUnitTestNotificationManager(), ...handlerArgs) {
+    GasUnitTest._runningInGas.set(this, GasUnitTestRunningContext.InsideAndOutsideGas);
+    GasUnitTest._msgPrefix.set(this, "");
+    this.logger = logger;
     this.startCaptureLogIndex = 0;
-
-    return GasUnitTestingFramework.instance;
+    this.nbTestOk = 0;
+    this.nbTestKo = 0;
+    this.name = testName;
+    this.handler = handler;
+    this.handlerParameters = handlerArgs;
   }
 
   /**
@@ -40,13 +60,13 @@ class GasUnitTestingFramework {
    * When Set to RunningContext.InsideGasOnly, the tests are executed only if executed from online Google App Script IDE.
    * When Set to RunningContext.OutsideGasOnly, the tests are executed only if executed from a local environnement.
    * When Set to RunningContext.InsideAndOutsideGas, the test are executed whatever the environnement is.
-   * @type {RunningContext}
+   * @type {GasUnitTestRunningContext}
    */
   get runningContext() {
-    return GasUnitTestingFramework._runningInGas.get(this);
+    return GasUnitTest._runningInGas.get(this);
   }
   set runningContext(value) {
-    GasUnitTestingFramework._runningInGas.set(this, value);
+    GasUnitTest._runningInGas.set(this, value);
   }
 
   /** 
@@ -54,40 +74,37 @@ class GasUnitTestingFramework {
    * This method is used by each internal test method to know if
    * running context is ok (test will be run in this case).
    * Running context is ok when :
-   * - Test is executed from Gas Environment and {@link GasUnitTestingFramework#runningContext runningContext}
-   * is set to {@link RunningContext InsideAndOutsideGas} or 
-   * to {@link GasUnitTestingFramework. InsideGasOnly} 
-   * - Test is executed outside Gas Environment and {@link GasUnitTestingFramework#runningContext runningContext}
-   * is set to {@link GasUnitTestingFramework InsideAndOutsideGas} or 
-   * to {@link GasUnitTestingFramework OutsideGasOnly}
+   * - Test is executed from Gas Environment and {@link GasUnitTest#runningContext runningContext}
+   * is set to {@link GasUnitTestRunningContext InsideAndOutsideGas} or 
+   * to {@link GasUnitTest. InsideGasOnly} 
+   * - Test is executed outside Gas Environment and {@link GasUnitTest#runningContext runningContext}
+   * is set to {@link GasUnitTest InsideAndOutsideGas} or 
+   * to {@link GasUnitTest OutsideGasOnly}
    * 
    * @return {boolean} True if test will be executed, false otherwise.
    */
   isRunningContextOk() {
     return (
-      (this.runningContext == RunningContext.InsideAndOutsideGas) ||
-      (this.isInGas && this.runningContext == RunningContext.InsideGasOnly) ||
-      (!this.isInGas && this.runningContext == RunningContext.OutsideGasOnly)
+      (this.runningContext == GasUnitTestRunningContext.InsideAndOutsideGas) ||
+      (this.isInGas && this.runningContext == GasUnitTestRunningContext.InsideGasOnly) ||
+      (!this.isInGas && this.runningContext == GasUnitTestRunningContext.OutsideGasOnly)
     )
   }
 
   /**
-   * Get/Set the prefix to use for displayed messages.
+   * Get/Set the prefix to use for result messages.
+   * 
    * Each test message will have this prefix written.
+   * 
+   * This can be useful in "simple" Mode.
    * @type {string}
    */
   get msgPrefix() {
-    return GasUnitTestingFramework._msgPrefix.get(this);
+    return GasUnitTest._msgPrefix.get(this);
   }
   set msgPrefix(prefix) {
-    GasUnitTestingFramework._msgPrefix.set(this, prefix);
+    GasUnitTest._msgPrefix.set(this, prefix);
   }
-
-  /**
-   * Log callback type.
-   * @callback GasUnitTestingFramework~Log
-   * @param {string} msg - Message to Print.
-   */
 
   /**
    * Log Message to Internal Method (console.log by default)
@@ -95,25 +112,30 @@ class GasUnitTestingFramework {
    * The output can be modified with {@link logFunction}.
    * This redefinition is useful to test the GasUnitTestingFramework itself or to modify the output behavior.
    * 
-   * @param {GasUnitTestingFramework} msg - Message to Print.
+   * @param {GasUnitTest} msg - Message to Print.
    * @see logFunction
    */
   log(msg) {
-    let fct = GasUnitTestingFramework._log.get(this);
-    fct(msg);
+    if (this.logger)
+      this.logger.log(this.msgPrefix + msg);
   }
-  
-  /**
-   * Set specific Console Log Method.
-   * 
-   * All printed test result are send to this method.
-   * By default {@link https://developer.mozilla.org/en-US/docs/Web/API/console/log console.log} is used.
-   * This redefinition is useful to test the GasUnitTestingFramework itself or to modify the output behavior.
-   * @type {GasUnitTestingFramework~Log}
-   * @see log
-   */
-  set logFunction(func) {
-    GasUnitTestingFramework._log.set(this, func);
+
+  setTestResult(status, message) {
+    if (status == true) {
+      this.nbTestOk +=1;
+    } else {
+      this.nbTestKo +=1;
+    }
+    if (this.logger)
+      this.logger.OnAssertResult(this, status, message);
+  }
+
+  execute() {
+    if (this.logger)
+      this.logger.OnStartTest(this); 
+    this.handler(this, ...this.handlerParameters);
+    if (this.logger)
+      this.logger.OnEndTest(this);
   }
 
   /**
@@ -127,7 +149,7 @@ class GasUnitTestingFramework {
    *  
    * This _waitedResult_ optional argument can be set to **false** to inverse this behaviour: in this case
    * it logs out a "PASSED" message if the condition is **not** truthy.
-   * The shortcut {@link GasUnitTestingFramework#assertFalse assertFalse} can also be used for this purpose.
+   * The shortcut {@link GasUnitTest#assertFalse assertFalse} can also be used for this purpose.
    * 
    * If you pass in a function that throws en error, the assert method will catch the error and log out a "FAILED" message 
    * ending with the exception content.
@@ -160,19 +182,19 @@ class GasUnitTestingFramework {
    * @param {Boolean | Function} condition - The condition/test to check. This can be a boolean (a test) or a function to call.
    * @param {String} message - the message to display in the console
    * @param {Boolean} [waitedResult=true] - Result that we want on the condition. true if not defined.
-   * @see {@link GasUnitTestingFramework#assertFalse assertFalse}
+   * @see {@link GasUnitTest#assertFalse assertFalse}
    */
   assert(condition, message, waitedResult = true) {
     if (!this.isRunningContextOk()) return;
     try {
       if ("function" === typeof condition) condition = condition();
       if (condition == waitedResult) {
-        this.log(`✔ PASSED: ${this.msgPrefix}${message}`);
+        this.setTestResult(true, message);
       } else {
-        this.log(`❌ FAILED: ${this.msgPrefix}${message}`);
+        this.setTestResult(false, message);
       }
     } catch (err) {
-      this.log(`❌ FAILED: ${this.msgPrefix}${message} (${err})`);
+      this.setTestResult(false,`${message} (${err})`);
     }
   }
 
@@ -180,7 +202,7 @@ class GasUnitTestingFramework {
    * Tests and Print to Console whether condition is False.
    * 
    * This is a shortcut to assert(condition, false, message).
-   * See the {@link GasUnitTestingFramework#assert assert method documentation} for more information.
+   * See the {@link GasUnitTest#assert assert method documentation} for more information.
    * 
    *    * @example
    * const testMyInt = 15;
@@ -196,7 +218,7 @@ class GasUnitTestingFramework {
    * 
    * @param {Boolean | Function} condition - The condition/test to check
    * @param {String} message - the message to display in the console
-   * @see {@link GasUnitTestingFramework#assertFalse assert}
+   * @see {@link GasUnitTest#assertFalse assert}
    */
   assertFalse(condition, message) {
     return this.assert(condition, message, false);
@@ -274,7 +296,7 @@ class GasUnitTestingFramework {
    * @param {Array} array1 - First Array to compare
    * @param {Array} array2 - Second Array to compare
    * @param {String} message - the message to display in the console
-   * @param {GasUnitTestingFramework~ItemEquality} [equalityMethod=Object.is] - Method used to check for array item equality.
+   * @param {GasUnitTest~ItemEquality} [equalityMethod=Object.is] - Method used to check for array item equality.
    *        {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is Object.is}
    *        is used if not defined.
    */
@@ -307,7 +329,7 @@ class GasUnitTestingFramework {
         message
       );
     } catch (err) {
-      this.log(`❌ FAILED: ${this.msgPrefix}${message} (${err})`);
+      this.setTestResult(false,`${message} (${err})`);
     }
   }
 
@@ -391,7 +413,7 @@ class GasUnitTestingFramework {
    * test.assertLogMatch("my function is logging", "Log of dummyLogFunction are the waited one")
    * // logs out: ✔ PASSED: Log of dummyLogFunction are the waited one
    * 
-   * @param {RegExp} regexp - Regex to test on the captured Logs.
+   * @param {RegExp|String} regexp - Regex to test on the captured Logs.
    * @param {String} message - the message to display in the console 
    * @param {Integer} [nb=1] - Number of waited match for the given regexp in the captured logs. 1 if not defined.
    * @param {Integer?} startLogIndex - Index where Captured Log is starting in the full Log
@@ -401,7 +423,7 @@ class GasUnitTestingFramework {
   assertLogMatch(regexp, message, nb = 1, startLogIndex = this.startCaptureLogIndex) {
     if (!this.isRunningContextOk()) return;
     let capturedLogContent = Logger.getLog().slice(startLogIndex);
-    let matches = capturedLogContent.match(regexp);
+    let matches = [...capturedLogContent.matchAll(regexp)];
     this.assert(matches != null && matches.length == nb, message);
   }
 
@@ -413,7 +435,7 @@ class GasUnitTestingFramework {
    * 
    * See Example in {@link assertLogMatch}.
    * 
-   * @param {Array.<RegExp>} patterns - an array of Regex to check for in the captured log.
+   * @param {Array.<RegExp|String>} patterns - an array of Regex to check for in the captured log.
    * @param {String} message - the message to display in the console 
    * @param {Integer?} startLogIndex - Index where Captured Log is starting in the full Log
    * output. If omitted, the index captured by the previous call to {@link startCaptureLog} is
@@ -422,36 +444,13 @@ class GasUnitTestingFramework {
   assertLogNotMatch(patterns, message, startLogIndex = this.startCaptureLogIndex) {
     if (!this.isRunningContextOk()) return;
     let capturedLogContent = Logger.getLog().slice(startLogIndex);
-    let isOk = patterns.every(pattern => capturedLogContent.match(pattern) == null);
+    let isOk = patterns.every(pattern => [...capturedLogContent.matchAll(pattern)].length === 0);
     this.assert(isOk, message);
   }
-
-  /**
-   * Print Header in the console
-   * Usually used before starting a test sequence.
-   * @param {String} text - Text to display inside the header.
-   */
-  printHeader(text) {
-    if (!this.isRunningContextOk()) return;
-    this.log('*********************');
-    this.log('* ' + text);
-    this.log('*********************');
-  }
-
-  /**
-   * Adds a new test to the prototype of the class
-   * @param {String} name the name of the function
-   * @param {Function} callback the function to add to the prototype of the class
-   */
-  addNewTest(name, callback) {
-    GasUnitTestingFramework.prototype[name] = callback;
-  }
-
 }
 
-GasUnitTestingFramework._runningInGas = new WeakMap();
-GasUnitTestingFramework._msgPrefix = new WeakMap();
-GasUnitTestingFramework._log = new WeakMap();
+GasUnitTest._runningInGas = new WeakMap();
+GasUnitTest._msgPrefix = new WeakMap();
 
 /**
  * An Enum that define Context of the execution related to Google AppScript Environnement.
@@ -461,16 +460,13 @@ GasUnitTestingFramework._log = new WeakMap();
  * @property {string} OutsideGasOnly Context for execution outside Google AppScript Environnement.
  * @property {string} InsideAndOutsideGas Context for execution from or outside Google AppScript Environnement (everywhere).
  */
-const RunningContext = Object.freeze({
+const GasUnitTestRunningContext = Object.freeze({
   InsideGasOnly: 'InsideGasOnly',
   OutsideGasOnly: 'OutsideGasOnly',
   InsideAndOutsideGas: 'InsideAndOutsideGas'
 })
 
- 
+
 if (typeof module !== "undefined") {
-  module.exports = {
-    GasUnitTestingFramework: GasUnitTestingFramework, 
-    RunningContext: RunningContext
-  }
+  module.exports = {GasUnitTest, GasUnitTestRunningContext};
 } 
