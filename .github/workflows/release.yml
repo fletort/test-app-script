@@ -27,7 +27,6 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run coverage
-    - run: mv ./coverage ./docs/
     - name: Upload Coverage Info
       uses: actions/upload-artifact@v3
       with:
