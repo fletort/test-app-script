@@ -33,13 +33,17 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
+      - name: Download npm package
+        run: npm ci
+      - name: Build JsDoc
+        run: npm run doc
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
-      - name: Build JsDoc
-        run: npm ci
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
+        with:
+          path: './docs'
   
   # Deployment job
   deploy:
