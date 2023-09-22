@@ -83,6 +83,19 @@ function GasUnitTestNotificationManagerTest(testSuite) {
       });
     });
 
+    add.test("OnAllTestEnd - is send to all clients", (test) => {
+      const underTest = prepareToAll();
+      const infoMock = new Object();
+
+      underTest.OnAllTestEnd(infoMock);
+
+      myClients.forEach((loggerMock, index) => {
+        test.assert(
+          loggerMock.onAllTestEndParameters.length === 1,
+          `OnAllTestEnd event is received on client ${index}`);
+      });
+    });
+
     add.test("OnStartTestSection - is send to all clients", (test) => {
       const underTest = prepareToAll();
       const section = new Object();

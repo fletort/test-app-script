@@ -7,6 +7,7 @@ class GasUnitTestLoggerMock {
   resetMock() {
     this.logCalledParameters = [];
     this.onStartAllTestParameters = [];
+    this.onAllTestEndParameters = [];
     this.onStartTestParameters = [];
     this.onStartTestSectionCalledParameters = [];
     this.onEndTestSectionCalledParameters = [];
@@ -20,6 +21,10 @@ class GasUnitTestLoggerMock {
 
   OnStartAllTest() {
     this.onStartAllTestParameters.push({});
+  }
+
+  OnAllTestEnd(info) {
+    this.onAllTestEndParameters.push({ "info": info });
   }
 
   OnStartTestSection(section) {

@@ -24,6 +24,30 @@ function GasUnitTestTest(testSuite) {
     throw exception;
   }
 
+  function genericResultTest(test, testedMethod, underTest, waitedStatus, waitedMessage,
+                              nbTestOkWaited = waitedStatus ? 1 : 0,
+                              nbTestKoWaited = waitedStatus ? 0 : 1) {
+    test.assert(
+      loggerMock.onAssertResultParameters.length == 1,
+      `${testedMethod} result notification is received`
+    );
+    test.assert(
+      loggerMock.onAssertResultParameters[0].test == underTest,
+      `${testedMethod} result test parameter is ok`
+    );
+    test.assert(
+      loggerMock.onAssertResultParameters[0].status == waitedStatus,
+      `${testedMethod} result status parameter is ok`
+    );
+    test.assert(
+      loggerMock.onAssertResultParameters[0].message == waitedMessage,
+      `${testedMethod} result message parameter is ok`
+    );
+    test.assert(underTest.nbTestOk == nbTestOkWaited);
+    test.assert(underTest.nbTestKo == nbTestKoWaited);
+  }
+
+
   testSuite.testSection("GasUnitTestTest", (add) => {
     
     add.test("constructor() - Initialized values are correct", (test) => {
@@ -116,28 +140,14 @@ function GasUnitTestTest(testSuite) {
       (test, {condition, testStatus, waiting=null, messageRequested=test.name, messageReceived=test.name}) => {
         const underTest = new GasUnitTest(testName, testContainerHandler.handlerMock, loggerMock);
         loggerMock.resetMock();
-
+        
         if (waiting == null) {
           underTest.assert(condition, messageRequested);
         } else {
           underTest.assert(condition, messageRequested, waiting);
         }
-        test.assert(
-          loggerMock.onAssertResultParameters.length == 1,
-          "Assert result notification is received"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].test == underTest,
-          "Assert result test parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].status == testStatus,
-          "Assert result status parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].message == messageReceived,
-          "Assert result message parameter is ok"
-        );
+
+        genericResultTest(test, "Assert", underTest, testStatus, messageReceived);
       }
     );
     
@@ -157,22 +167,7 @@ function GasUnitTestTest(testSuite) {
 
         underTest.assertFalse(condition, localTestMsg);
 
-        test.assert(
-          loggerMock.onAssertResultParameters.length == 1,
-          "assertFalse result notification is received"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].test == underTest,
-          "assertFalse result test parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].status == testStatus,
-          "assertFalse result status parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].message == waitedMsg,
-          "assertFalse result message parameter is ok"
-        );
+        genericResultTest(test, "assertFalse", underTest, testStatus, waitedMsg);
       }
     );
 
@@ -195,22 +190,7 @@ function GasUnitTestTest(testSuite) {
         localTestMsg = test.name;
         underTest.assertThrowErr(fct, exceptionMsg, localTestMsg);
 
-        test.assert(
-          loggerMock.onAssertResultParameters.length == 1,
-          "assertFalse result notification is received"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].test == underTest,
-          "assertFalse result test parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].status == waitedStatus,
-          "assertFalse result status parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].message == localTestMsg,
-          "assertFalse result message parameter is ok"
-        );
+        genericResultTest(test, "assertThrowErr", underTest, waitedStatus, localTestMsg);
       }
     );
 
@@ -255,22 +235,7 @@ function GasUnitTestTest(testSuite) {
           underTest.assertArrayEquals(in_array1, in_array2, in_message);
         }
 
-        test.assert(
-          loggerMock.onAssertResultParameters.length == 1,
-          "assert result notification is received"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].status == output_result,
-          "assert result status parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].message == output_message,
-          "assert result message parameter is ok"
-        );
+        genericResultTest(test, "assertArrayEquals", underTest, output_result, output_message);
       }
     );
 
@@ -302,24 +267,8 @@ function GasUnitTestTest(testSuite) {
         loggerMock.resetMock();
 
         underTest.assertIs2dArray(in_array, in_message);
- 
-
-        test.assert(
-          loggerMock.onAssertResultParameters.length == 1,
-          "assert result notification is received"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].status == output_result,
-          "assert result status parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].message == output_message,
-          "assert result message parameter is ok"
-        );
+        
+        genericResultTest(test, "assertIs2dArray", underTest, output_result, output_message);
       }
     );
 
@@ -355,22 +304,7 @@ function GasUnitTestTest(testSuite) {
           underTest.assert2dArrayEquals(in_array1, in_array2, in_message);
         }
 
-        test.assert(
-          loggerMock.onAssertResultParameters.length == 1,
-          "assert result notification is received"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].status == output_result,
-          "assert result status parameter is ok"
-        );
-        test.assert(
-          loggerMock.onAssertResultParameters[0].message == output_message,
-          "assert result message parameter is ok"
-        );
+        genericResultTest(test, "assert2dArrayEquals", underTest, output_result, output_message);
       }
     );
 
@@ -386,18 +320,7 @@ function GasUnitTestTest(testSuite) {
 
         underTest.assertLogMatch(testLog, localTestMsg);
 
-        test.assert(loggerMock.onAssertResultParameters.length == 1, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].status == false,
-          "assert result status parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].message == localTestMsg,
-          "assert result message parameter is ok"
-        );
+        genericResultTest(test, "assertLogMatch", underTest, false, localTestMsg);
       });
 
       add.test("startCaptureLog(),assertLogMatch() - Log is the waited one", (test) => {
@@ -409,18 +332,7 @@ function GasUnitTestTest(testSuite) {
         Logger.log(testLog);
         underTest.assertLogMatch(testLog, localTestMsg);
 
-        test.assert(loggerMock.onAssertResultParameters.length == 1, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].status == true,
-          "assert result status parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].message == localTestMsg,
-          "assert result message parameter is ok"
-        );
+        genericResultTest(test, "assertLogMatch", underTest, true, localTestMsg);
       });
 
       add.test("startCaptureLog(),assertLogMatch() - Log are no more in the captured window", (test) => {
@@ -433,18 +345,7 @@ function GasUnitTestTest(testSuite) {
         underTest.startCaptureLog();
         underTest.assertLogMatch(testLog, localTestMsg);
 
-        test.assert(loggerMock.onAssertResultParameters.length == 1, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].status == false,
-          "assert result status parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].message == localTestMsg,
-          "assert result message parameter is ok"
-        );
+        genericResultTest(test, "assertLogMatch", underTest, false, localTestMsg);
       });
 
       add.test("startCaptureLog(),assertLogMatch() - Log are present twice", (test) => {
@@ -457,18 +358,7 @@ function GasUnitTestTest(testSuite) {
         Logger.log(testLog);
         underTest.assertLogMatch(testLog, localTestMsg, 2);
 
-        test.assert(loggerMock.onAssertResultParameters.length == 1, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].status == true,
-          "assert result status parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].message == localTestMsg,
-          "assert result message parameter is ok"
-        );
+        genericResultTest(test, "assertLogMatch", underTest, true, localTestMsg);
       });
 
       add.test("assertLogMatch() - startIndex can be modified", (test) => {
@@ -485,23 +375,12 @@ function GasUnitTestTest(testSuite) {
         
         underTest.assertLogMatch(testLog, localTestMsg, 2);
 
-        test.assert(loggerMock.onAssertResultParameters.length == 1, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].status == true,
-          "assert result status parameter is ok"
-        );
+        genericResultTest(test, "assertLogMatch", underTest, true, localTestMsg);
 
         loggerMock.resetMock();
         underTest.assertLogMatch(testLog, localTestMsg, 3, 0);
 
-        test.assert(loggerMock.onAssertResultParameters.length == 1, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].status == true,
-          "assert result status parameter is ok"
-        );
-
+        genericResultTest(test, "assertLogMatch", underTest, true, localTestMsg, 2, 0);
       });
 
       add.test("assertLogNoMatch() - Logs are not present", (test) => {
@@ -515,26 +394,12 @@ function GasUnitTestTest(testSuite) {
         
         underTest.assertLogNotMatch(testNoLogRegex, localTestMsg);
 
-        test.assert(loggerMock.onAssertResultParameters.length == 1, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].test == underTest,
-          "assert result test parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].status == true,
-          "assert result status parameter is ok"
-        );
-        test.assert(loggerMock.onAssertResultParameters[0].message == localTestMsg,
-          "assert result message parameter is ok"
-        );
+        genericResultTest(test, "assertLogNotMatch", underTest, true, localTestMsg);
         
+        loggerMock.resetMock();
         underTest.assertLogNotMatch([testLog], localTestMsg);
-        test.assert(loggerMock.onAssertResultParameters.length == 2, 
-          "assert result notification is received"
-        );
-        test.assert(loggerMock.onAssertResultParameters[1].status == false,
-          "assert result status parameter is ok"
-        );
+        
+        genericResultTest(test, "assertLogNotMatch", underTest, false, localTestMsg, 1 ,1);
       });
     });
 

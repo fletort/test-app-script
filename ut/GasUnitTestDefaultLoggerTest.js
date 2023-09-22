@@ -90,6 +90,19 @@ function GasUnitTestDefaultLoggerTest(testSuite) {underTest
       test.assert(output[0] === `Test Start`, `OnStartAllTest() logs $'{waitedMsg}`);
     });
 
+    add.test("Log finishing global test execution",(test) => {
+      const testMockName = `My Test`;
+      const testMock = new GasUnitTestInfo(testMockName);
+      testMock.nbTestOk = 5;
+      testMock.nbTestKo = 2;
+      const waitedMsg = `${GasUnitTestDefaultLogger.emojiKo} End TestSuite - ${testMock.nbTestOk + testMock.nbTestKo} tests, ${testMock.nbTestKo} failures`;
+      resetConsoleMock();
+
+      underTest.OnAllTestEnd(testMock);
+      
+      test.assert(output[0] === waitedMsg, `OnAllTestEnd() logs $'{waitedMsg}`);
+    });
+
     add.test("Log starting section test execution",(test) => {
       const sectionMockName = `My Section`;
       const sectionMock = new GasUnitTestContainer(sectionMockName);

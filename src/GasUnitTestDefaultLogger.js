@@ -53,6 +53,14 @@ class GasUnitTestDefaultLogger extends IGasUnitTestNotification {
     OnStartAllTest() {
       this.log(`Test Start`);
     }
+
+    /**
+     * @param {GasUnitTestInfo} info 
+     */
+    OnAllTestEnd(info) {
+      let prefix = info.isOk() ? GasUnitTestDefaultLogger.emojiOk : GasUnitTestDefaultLogger.emojiKo;
+      this.log(`${prefix} End TestSuite - ${info.NbTests} tests, ${info.nbTestKo} failures`);
+    }
     
     OnStartTestSection(section) {
       this._adaptPrefixForLastSectionElement(section);

@@ -6,6 +6,7 @@
 const { GasUnitTestNotificationManager } = require("./GasUnitTestNotificationManager");
 const Logger = require("../mock/Logger");
 const { IGasUnitTestNotification } = require("./IGasUnitTestNotification");
+const { GasUnitTestInfo } = require("./GasUnitTestInfo");
 
 
 
@@ -16,9 +17,10 @@ TODO: Notion de template (list de) d'output , la classe mère ne garderait donc 
 
 /**
  * Classe uses to create Test.
- * This class is created by the {@link GasUnitTestContainer#test test method of the GasUnitTestContainer class}. 
+ * This class is created by the {@link GasUnitTestContainer#test test method of the GasUnitTestContainer class}.
+ * @implements GasUnitTestInfo
  */
-class GasUnitTest {
+class GasUnitTest extends GasUnitTestInfo {
   /**
      * Test callback type.
      * @callback test
@@ -35,13 +37,11 @@ class GasUnitTest {
    * @hideconstructor
    */
   constructor(testName, handler, logger=new GasUnitTestNotificationManager(), ...handlerArgs) {
+    super(testName);
     GasUnitTest._runningInGas.set(this, GasUnitTestRunningContext.InsideAndOutsideGas);
     GasUnitTest._msgPrefix.set(this, "");
     this.logger = logger;
     this.startCaptureLogIndex = 0;
-    this.nbTestOk = 0;
-    this.nbTestKo = 0;
-    this.name = testName;
     this.handler = handler;
     this.handlerParameters = handlerArgs;
   }

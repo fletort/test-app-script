@@ -48,6 +48,10 @@ class GasUnitTestNotificationManager extends IGasUnitTestNotification {
         this.clients.forEach((client) => client.OnStartAllTest());
     }
 
+    OnAllTestEnd(info) {
+        this.clients.forEach((client) => client.OnAllTestEnd(info));
+    }
+
     OnStartTestSection(section) {
         this.clients.forEach((client) => client.OnStartTestSection(section));
     }

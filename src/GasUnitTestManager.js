@@ -1,20 +1,24 @@
 const {GasUnitTestContainer} = require("./GasUnitTestContainer");
+const { GasUnitTestInfo } = require("./GasUnitTestInfo");
 const { GasUnitTestNotificationManager } = require("./GasUnitTestNotificationManager");
 
 /**
  * Singleton classe uses to Manage all test campagn
- */
-class GasUnitTestManager {
+ * @implements GasUnitTestInfo 
+*/
+class GasUnitTestManager extends GasUnitTestInfo {
     constructor() {
+      super();
       this.sections = [];
-      this.totalOk = 0;
-      this.totalKo = 0;
       this.logger = new GasUnitTestNotificationManager();
       
       /** use for dependency injection (test purpose) 
-       * @hideconstructor
+       * @ignore
       */
-      this.sectionClass = GasUnitTestContainer;      
+      this.sectionClass = GasUnitTestContainer;
+      
+      // use for dependency injection (test purpose) 
+      this.exitOnError = (code) => {process.exit(code)};
     }
   
     /**
@@ -40,9 +44,18 @@ class GasUnitTestManager {
      * Execute All the Tests.
      */
     execute() {
-      this.logger.OnStartAllTest()
+      this.logger.OnStartAllTest();
   
-      this.sections.forEach(element => element.execute());
+      this.sections.forEach(element => {
+        element.execute()
+        this.updateCounterFrom(element);
+      });
+
+      this.logger.OnAllTestEnd(this);
+
+      if (!this.isOk()) {
+        this.exitOnError(1);
+      }
     }
   
   }

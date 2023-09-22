@@ -11,12 +11,14 @@ function GasUnitTestContainerTest(testSuite) {
       const testName = "My Name";
       const underTest = new GasUnitTestContainer(testName, testContainerHandler.handlerMock);
       test.assert(underTest.name === testName, "name property is correct");
+      test.assert(underTest.nbTestOk === 0, "nbTestOk property is correct");
+      test.assert(underTest.nbTestKo === 0, "nbTestKo property is correct");
       test.assert(underTest.handler == testContainerHandler.handlerMock, "handler property is correct");
       test.assert(underTest.logger.constructor.name === "GasUnitTestNotificationManager",
         "logger property is the default one (GasUnitTestNotificationManager)");
 
       const underTest2 = new GasUnitTestContainer(testName, testContainerHandler.handlerMock, loggerMock);
-      test.assert(underTest2.logger.constructor.name != "GasUnitTestLoggerMock",
+      test.assert(underTest2.logger.constructor.name === "GasUnitTestLoggerMock",
         "logger property is correct");
     });
 
@@ -40,6 +42,8 @@ function GasUnitTestContainerTest(testSuite) {
       test.assert(
         testContainerHandler.givenObject === underTest,
         "Container Handler receive the section as argument");
+      test.assert(underTest.nbTestOk === 0, "nbTestOk property is correct");
+      test.assert(underTest.nbTestKo === 0, "nbTestKo property is correct");
     });
 
     add.test("test() - Create a test", (test) => {
@@ -232,15 +236,25 @@ function GasUnitTestContainerTest(testSuite) {
       var test1Handler = new GasUnitTest_HandlerMock();
       /** @type {GasUnitTestMock} */
       const test1 = underTest.test(test1Name, test1Handler.handlerMock.bind(test1Handler));
+      test1.nbTestOk = 2;
+      let waitedTestOk = 1;
+      let waitedTestKo = 0;
       
       const test2Name = "My Second Test";
       var test2Handler = new GasUnitTest_HandlerMock();
       /** @type {GasUnitTestMock} */
       const test2 = underTest.test(test2Name, test2Handler.handlerMock.bind(test2Handler));
+      test2.nbTestOk = 5;
+      test2.nbTestKo = 2;
+      waitedTestKo += 1;
       
       const nestedName = "Nested Name";
       var nestedHandler = new GasUnitTest_HandlerMock();
       const nestedContainer = underTest.nested(nestedName, nestedHandler.handlerMock.bind(nestedHandler));
+      nestedContainer.nbTestOk = 10;
+      nestedContainer.nbTestKo = 2;
+      waitedTestOk += nestedContainer.nbTestOk;
+      waitedTestKo += nestedContainer.nbTestKo;
         
       underTest.execute();
       test.assert(
@@ -261,6 +275,8 @@ function GasUnitTestContainerTest(testSuite) {
         test.assert(  
           loggerMock.onStartTestSectionCalledParameters[1].section === nestedContainer,
           "Logger onStartTestSection receive the nested as argument on second call");
+      test.assert(underTest.nbTestOk === waitedTestOk, "nbTestOk property is correct");
+      test.assert(underTest.nbTestKo === waitedTestKo, "nbTestKo property is correct");
     });
 
 

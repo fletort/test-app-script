@@ -1,4 +1,4 @@
-const { GasUnitTestManager, GasUnitTest } = require("../src");
+const { GasUnitTestManager } = require("../src");
 const { GasUnitTestContainerTest } = require("./GasUnitTestContainerTest");
 const { GasUnitTestDefaultLoggerTest } = require("./GasUnitTestDefaultLoggerTest");
 const { GasUnitTestManagerTest } = require("./GasUnitTestManagerTest");
@@ -7,7 +7,6 @@ const { GasUnitTestTest } = require("./GasUnitTestTest");
 
 
 function runTestSuite() {
-    const tt =  new GasUnitTest();
     const manager =  new GasUnitTestManager();
     GasUnitTestDefaultLoggerTest(manager);
     GasUnitTestContainerTest(manager);
