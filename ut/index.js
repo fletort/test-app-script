@@ -7,23 +7,24 @@ const { GasUnitTestTest } = require("./GasUnitTestTest");
 
 
 function runTestSuite() {
-    const manager =  new GasUnitTestManager();
-    GasUnitTestDefaultLoggerTest(manager);
-    GasUnitTestContainerTest(manager);
-    GasUnitTestManagerTest(manager);
-    GasUnitTestNotificationManagerTest(manager);
-    GasUnitTestTest(manager)
-    manager.execute();
+  const manager = new GasUnitTestManager();
+  GasUnitTestDefaultLoggerTest(manager);
+  GasUnitTestContainerTest(manager);
+  GasUnitTestManagerTest(manager);
+  GasUnitTestNotificationManagerTest(manager);
+  GasUnitTestTest(manager)
+  manager.execute();
 }
 
 
 /**
- * If we're running locally, execute the tests. In GAS environment, runTests() needs to be executed manually
+ * If we're running locally, execute the tests.
+ * In GAS environment, runTestSuite() needs to be executed manually
  */
 (function () {
-    /**
-   * @param {Boolean} - if true, were're in the GAS environment, otherwise we're running locally
-   */
-    const IS_GAS_ENV = typeof ScriptApp !== 'undefined';
-    if (!IS_GAS_ENV) runTestSuite();
-  })();
+  /**
+ * @type {Boolean} - if true, were're in the GAS environment, otherwise we're running locally
+ */
+  const IS_GAS_ENV = (typeof ScriptApp !== 'undefined');
+  if (!IS_GAS_ENV) runTestSuite();
+})();
