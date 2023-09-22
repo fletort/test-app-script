@@ -30,7 +30,7 @@ jobs:
     - name: Run Test
       run: npm run coverage
     - name: Create Coverage Badge
-      run: coverage-badges --output coverage/badges.svg
+      run: npx coverage-badges --output coverage/badges.svg
     - name: Upload Coverage Info
       uses: actions/upload-artifact@v3
       with:
