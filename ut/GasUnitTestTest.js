@@ -3,7 +3,7 @@ const { GasUnitTestManager, GasUnitTest, GasUnitTestRunningContext } = require('
 const { GasUnitTestLoggerMock, GasUnitTest_HandlerMock } = require('./GasUnitTestMock.js');
 
 /**
- * 
+ * Unit Test of GasUnitTest class
  * @param {GasUnitTestManager} testSuite 
  */
 function GasUnitTestTest(testSuite) {
@@ -43,8 +43,8 @@ function GasUnitTestTest(testSuite) {
       loggerMock.onAssertResultParameters[0].message == waitedMessage,
       `${testedMethod} result message parameter is ok`
     );
-    test.assert(underTest.nbTestOk == nbTestOkWaited);
-    test.assert(underTest.nbTestKo == nbTestKoWaited);
+    test.assert(underTest.nbAssertOk == nbTestOkWaited);
+    test.assert(underTest.nbAssertKo == nbTestKoWaited);
   }
 
 
@@ -103,6 +103,27 @@ function GasUnitTestTest(testSuite) {
       test.assert(
         loggerMock.onEndTestParameters[0].test === underTest,
         "Logger OnEndTest is called with test parameter");
+      test.assert(underTest.nbTestOk == 1);
+      test.assert(underTest.nbTestKo == 0);
+    });
+
+    add.test("execute() - Execute a test without extra parameter and ko assert", (test) => {
+      const underTest = new GasUnitTest(testName, testContainerHandler.handlerMock.bind(testContainerHandler), loggerMock);
+      loggerMock.resetMock();
+      underTest.nbAssertKo = 5;
+
+      underTest.execute();
+
+      test.assert(
+        loggerMock.onStartTestParameters[0].test === underTest,
+        "Logger OnStartTest is called with test parameter");
+      test.assert(testContainerHandler.givenObject === underTest, "Test Handler is called");
+      test.assert(testContainerHandler.args.length === 0, "No extra parameters are received");
+      test.assert(
+        loggerMock.onEndTestParameters[0].test === underTest,
+        "Logger OnEndTest is called with test parameter");
+      test.assert(underTest.nbTestOk == 0);
+      test.assert(underTest.nbTestKo == 1);
     });
 
     add.test("execute() - Execute a test with extra parameters", (test) => {

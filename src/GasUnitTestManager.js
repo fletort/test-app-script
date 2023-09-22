@@ -20,7 +20,7 @@ class GasUnitTestManager extends GasUnitTestInfo {
       // use for dependency injection (test purpose) 
       this.exitOnError = (code) => {process.exit(code)};
     }
-  
+
     /**
      * Define a test section. [Decorator Like Method]
      * 
@@ -31,7 +31,7 @@ class GasUnitTestManager extends GasUnitTestInfo {
      * A Test Section is something like a TestClass in JUnit world. 
      * 
      * @param {string} testSectionName - The Test Section Name (usually based on the name of the class tested by the test method)
-     * @param {testSection} fct - This method defines the test section content. Its parameter is used to define the test section content with test and other fixture.
+     * @param {function(GasUnitTestContainer)} fct - This method defines the test section content. Its parameter is used to define the test section content with test and other fixture.
      * @return {GasUnitTestContainer} The created Section
      */
     testSection(testSectionName, fct) {

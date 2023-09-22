@@ -6,10 +6,16 @@ class GasUnitTestInfo {
     this.name = name;
     this.nbTestOk = 0;
     this.nbTestKo = 0;
+    this.nbAssertOk = 0;
+    this.nbAssertKo = 0;
   }
 
   get NbTests() {
     return this.nbTestOk + this.nbTestKo;
+  }
+
+  get NbAsserts() {
+    return this.nbAssertOk + this.nbAssertKo;
   }
 
   /**
@@ -28,6 +34,8 @@ class GasUnitTestInfo {
   updateCounterFrom(child) {
     this.nbTestOk += child.nbTestOk;
     this.nbTestKo += child.nbTestKo;
+    this.nbAssertOk += child.nbAssertOk;
+    this.nbAssertKo += child.nbAssertKo;
   }
 }
 

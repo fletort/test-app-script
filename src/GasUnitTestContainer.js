@@ -36,7 +36,7 @@ class GasUnitTestContainer extends GasUnitTestInfo {
    * It contains some preparation steps, a call to the tested method, then some assert call to check the behaviour.
    * 
    * @param {string} displayName - Name of the test
-   * @param {test} fct - This method defines the test content. Its parameter is used to access to assert Tools.
+   * @param {function(GasUnitTest)} fct - This method defines the test content. Its parameter is used to access to assert Tools.
    * @return {GasUnitTest} - The created test
    */
   test(displayName, fct) {
@@ -46,20 +46,6 @@ class GasUnitTestContainer extends GasUnitTestInfo {
   }
 
   /**
-   * ParameterizedTest callback type.
-   * @callback ParameterizedTestHandler
-   * @param {GasUnitTest} add - class used to to access to assert/test Tools.
-   * @param {...*} args - Arguments or Test Arguments Dictionary
-   */
-
-  /**
-   * ParameterizedTest callback type.
-   * @typedef ValuesSourceCustomName
-   * @property {string} displayName - 
-   * @property {Object} args - 
-   */
-
-  /**
    * Define parameterized Tests based on a unique test Method. [Decorator Like Method]
    * 
    * @param {Object} params
@@ -67,7 +53,7 @@ class GasUnitTestContainer extends GasUnitTestInfo {
    * @param {String} params.parameterizedTestNameTemplate - Customizing globally the name of each parameterized test
    * @param {Array.<Object>} params.valuesSource - Array of single value or multiple values (with a 2d Array or dict) that will be pass to the test method
    * @param {Array.<{displayName: string, args: Object}>} params.valuesSourceCustomName -
-   * @param {ParameterizedTestHandler} fct - This method defines the test content. Its first parameter is used to access to assert Tools.
+   * @param {function(GasUnitTest, ...*)} fct - This method defines the test content. Its first parameter is used to access to assert Tools, it is followed by Arguments or Test Arguments Dictionary
    * @return {Array.<GasUnitTest>} - The Created tests
    */
   parameterizedTest({ displayName = "", parameterizedTestNameTemplate = "",
@@ -138,7 +124,7 @@ class GasUnitTestContainer extends GasUnitTestInfo {
   /** 
    * Define a group of nested tests. [Decorator Like Method]
    * @param {string} displayName - The Nested Section Name
-   * @param {testSection} fct - This method defines the test nested section content. Its parameter is used to define the test nested section content with test and other fixture.
+   * @param {function(GasUnitTestContainer)} fct - This method defines the test nested section content. Its parameter is used to define the test nested section content with test and other fixture.
    * @return {GasUnitTestContainer} - The created section
    */
   nested(displayName, fct) {
@@ -163,16 +149,7 @@ class GasUnitTestContainer extends GasUnitTestInfo {
         element.execute();
         
         // Compute nb TestOkKO for the current section
-        if (element instanceof GasUnitTestContainer) {
-          this.updateCounterFrom(element);
-        } else { // else this is a GasUnitTest
-          // so nb test count the nb of assert, check only global test result
-          if (element.isOk()) {
-            this.nbTestOk += 1;
-          } else {
-            this.nbTestKo += 1;
-          }
-        }
+        this.updateCounterFrom(element);
       }
     })
 

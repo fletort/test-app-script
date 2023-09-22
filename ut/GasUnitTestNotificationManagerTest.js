@@ -2,7 +2,7 @@ const { GasUnitTestManager, GasUnitTestNotificationManager } = require("../src")
 const { GasUnitTestLoggerMock } = require("./GasUnitTestMock");
 
 /**
- * 
+ * Unit Test of GasUnitTestNotificationManager class
  * @param {GasUnitTestManager} testSuite 
  */
 function GasUnitTestNotificationManagerTest(testSuite) {

@@ -122,9 +122,9 @@ class GasUnitTest extends GasUnitTestInfo {
 
   setTestResult(status, message) {
     if (status == true) {
-      this.nbTestOk +=1;
+      this.nbAssertOk +=1;
     } else {
-      this.nbTestKo +=1;
+      this.nbAssertKo +=1;
     }
     if (this.logger)
       this.logger.OnAssertResult(this, status, message);
@@ -134,6 +134,10 @@ class GasUnitTest extends GasUnitTestInfo {
     if (this.logger)
       this.logger.OnStartTest(this); 
     this.handler(this, ...this.handlerParameters);
+
+    this.nbTestKo = this.nbAssertKo > 0 ? 1 : 0;
+    this.nbTestOk = this.nbAssertKo == 0 ? 1 : 0;
+
     if (this.logger)
       this.logger.OnEndTest(this);
   }
