@@ -1,5 +1,7 @@
 # GasUnitTestingFramework: Google Apps Script Unit Testing Framework
 
+[![Coverage Status](https://fletort.github.io/test-app-script/coverage/badges.svg)](https://fletort.github.io/test-app-script/coverage/)
+
 ## Introduction
 
 GasUnitTestingFramework is a unitary test Framework dedicated to Google Apps Script (GAS)
