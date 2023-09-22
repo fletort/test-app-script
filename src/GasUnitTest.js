@@ -22,16 +22,9 @@ TODO: Notion de template (list de) d'output , la classe mère ne garderait donc 
  */
 class GasUnitTest extends GasUnitTestInfo {
   /**
-     * Test callback type.
-     * @callback test
-     * @param {GasUnitTest} test - class used to to access to assert/test Tools.
-     * @param {...any} args - other args that can be passed to the test content.
-     */
-
-  /**
    * Create a GasUnitTest instance (usually used but GasUnitTestContainer)
    * @param {@} testName - Name of the Test
-   * @param {test} handler - test content, this is an handler receiving the current test as parameter 
+   * @param {function(GasUnitTest, ...any)} handler - test content, this is an handler receiving the current test as parameter, and extended parameters 
    * @param {IGasUnitTestNotification} logger - Logger class implementing IGasUnitTestNotification interface.
    * @param  {...any} handlerArgs - additional parameters that must be passed to the handler when call
    * @hideconstructor

@@ -15,7 +15,10 @@
       "encoding": "utf8",
       "verbose": true,
       "recurse": true,
-      "template": "./node_modules/docdash"
+      "template": "./node_modules/clean-jsdoc-theme",
+      "theme_opts": {
+        "default_theme": "light"
+      }
     // "docdash": {
     //   "search": true,
     //   "scripts": ["https://unpkg.com/mermaid/dist/mermaid.js", "docs-init.js"]
@@ -26,6 +29,11 @@
       "monospaceLinks": false,
       "default": {
         "outputSourceFiles": false
+    },
+    "markdown": {
+      "hardwrap": false,
+      "idInHeadings": true
+      // This is important for clean-jsdoc-theme, otherwise some features might not work.
     }
    }
 
