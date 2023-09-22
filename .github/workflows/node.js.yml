@@ -18,4 +18,11 @@ jobs:
         node-version: '18.x'
         cache: 'npm'
     - run: npm ci
-    - run: npm test
+    - run: npm run coverage
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: './coverage'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2

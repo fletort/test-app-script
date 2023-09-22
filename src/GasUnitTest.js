@@ -17,8 +17,10 @@ TODO: Notion de template (list de) d'output , la classe mère ne garderait donc 
 
 /**
  * Classe uses to create Test.
+ * 
  * This class is created by the {@link GasUnitTestContainer#test test method of the GasUnitTestContainer class}.
  * @implements GasUnitTestInfo
+ * @hideconstructor
  */
 class GasUnitTest extends GasUnitTestInfo {
   /**
@@ -28,6 +30,7 @@ class GasUnitTest extends GasUnitTestInfo {
    * @param {IGasUnitTestNotification} logger - Logger class implementing IGasUnitTestNotification interface.
    * @param  {...any} handlerArgs - additional parameters that must be passed to the handler when call
    * @hideconstructor
+   * @ignore
    */
   constructor(testName, handler, logger=new GasUnitTestNotificationManager(), ...handlerArgs) {
     super(testName);
