@@ -14,9 +14,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: namaggarwal/clasp-token-action@v0.0.1
         with:
-            client-id: test-client-id
-            client-secret: test-client-secret
-            refresh-token: test-refresh-token
+            client-id: ${{ secrets.GAPS_CLIENT_ID }}
+            client-secret: ${{ secrets.GAPS_CLIENT_SECRET }}
+            refresh-token: ${{ secrets.GAPS_REFRESH_TOKEN }}
       - name: Install clasp
         id: install-clasp
         run: sudo npm install @google/clasp@2.4.1 -g
