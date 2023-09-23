@@ -8,7 +8,7 @@ on:
 
 jobs:
     # Test job
-    test:
+    push_to_gasp:
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
             refresh-token: ${{ secrets.GAPS_REFRESH_TOKEN }}
       - name: Install clasp
         id: install-clasp
-        run: sudo npm install @google/clasp@2.4.1 -g
-      - name: Check clasp login status
-        id: clasp_login
-        run: clasp login --status
+        run: sudo npm install @google/clasp -g
+      - name: Push script to scripts.google.com
+        id: clasp-push
+        run: clasp push -f
