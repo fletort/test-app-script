@@ -1,4 +1,4 @@
-name: Release
+name: gaps
 
 on:
   push:
@@ -17,3 +17,9 @@ jobs:
             client-id: test-client-id
             client-secret: test-client-secret
             refresh-token: test-refresh-token
+      - name: Install clasp
+        id: install-clasp
+        run: sudo npm install @google/clasp@2.4.1 -g
+      - name: Check clasp login status
+        id: clasp_login
+        run: clasp login --status
