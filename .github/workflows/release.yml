@@ -61,7 +61,7 @@ jobs:
           retention-days: 1
 
   # Deployment doc & testresult
-  deploy:
+  deploy_doc:
     environment:
       name: github-pages
       url: ${{steps.deployment.outputs.page_url}}

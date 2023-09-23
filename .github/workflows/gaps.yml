@@ -1,0 +1,17 @@
+name: Release
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+    # Test job
+    test:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+      - uses: namaggarwal/clasp-token-action@v0.0.1
+        with:
+            client-id: test-client-id
+            client-secret: test-client-secret
+            refresh-token: test-refresh-token
