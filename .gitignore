@@ -1,3 +1,7 @@
+# clasp secret file
+.clasprc.json
+creds.json
+
 # Dependency directories
 # compiled output
 /dist
