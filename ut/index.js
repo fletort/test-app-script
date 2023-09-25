@@ -1,11 +1,11 @@
-// COMMENT THIS BLOCK IN GASP - START
+/* COMMENT THIS BLOCK IN GASP - START
 const { GasUnitTestManager } = require("../src");
 const { GasUnitTestContainerTest } = require("./GasUnitTestContainerTest");
 const { GasUnitTestDefaultLoggerTest } = require("./GasUnitTestDefaultLoggerTest");
 const { GasUnitTestManagerTest } = require("./GasUnitTestManagerTest");
 const { GasUnitTestNotificationManagerTest } = require("./GasUnitTestNotificationManagerTest");
 const { GasUnitTestTest } = require("./GasUnitTestTest");
-// COMMENT THIS BLOCK IN GASP - END
+COMMENT THIS BLOCK IN GASP - END */
 
 function runTestSuite() {
   const manager = new GasUnitTestManager();
@@ -14,7 +14,7 @@ function runTestSuite() {
   GasUnitTestManagerTest(manager);
   GasUnitTestNotificationManagerTest(manager);
   GasUnitTestTest(manager)
-  manager.execute();
+  return manager.execute();
 }
 
 

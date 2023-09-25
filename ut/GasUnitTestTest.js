@@ -388,7 +388,7 @@ function GasUnitTestTest(testSuite) {
         localTestMsg = "My Log Test"
         const underTest = new GasUnitTest(testName, testContainerHandler.handlerMock, loggerMock);
         loggerMock.resetMock();
-        Logger.mock_content = "";
+        Logger.clear();
 
         underTest.startCaptureLog();
         Logger.log(testLog);
@@ -410,7 +410,7 @@ function GasUnitTestTest(testSuite) {
         localTestMsg = "My Log Test"
         const underTest = new GasUnitTest(testName, testContainerHandler.handlerMock, loggerMock);
         loggerMock.resetMock();
-        Logger.mock_content = "";
+        Logger.clear();
 
         underTest.startCaptureLog();
         Logger.log(testLog);

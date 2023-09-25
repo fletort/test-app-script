@@ -7,7 +7,7 @@ class Logger {
     static mock_content= "";
 
     static clear() {
-        this.content = "";
+        this.mock_content = "";
     }
 
     static getLog() {

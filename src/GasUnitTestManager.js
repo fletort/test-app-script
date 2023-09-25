@@ -21,7 +21,13 @@ class GasUnitTestManager extends GasUnitTestInfo {
     this.sectionClass = GasUnitTestContainer;
 
     // use for dependency injection (test purpose) 
-    this.exitOnError = (code) => { process.exit(code) };
+    this.exitOnError = (code) => { 
+      if (typeof module !== "undefined") {
+        process.exit(code) 
+      } else {
+        throw new Error("Test Suite Error");
+      }
+    };
   }
 
   /**
@@ -57,8 +63,11 @@ class GasUnitTestManager extends GasUnitTestInfo {
     this.logger.OnAllTestEnd(this);
 
     if (!this.isOk()) {
-      this.exitOnError(1);
+      //this.exitOnError(1);
+      return 1;
     }
+
+    return 0;
   }
 
 }
