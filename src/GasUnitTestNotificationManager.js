@@ -1,6 +1,7 @@
+// COMMENT THIS BLOCK IN GASP - START
 const { GasUnitTestDefaultLogger } = require("./GasUnitTestDefaultLogger");
 const { IGasUnitTestNotification } = require("./IGasUnitTestNotification");
-
+// COMMENT THIS BLOCK IN GASP - END
 
 /**
  * Singleton classe uses to Manage all Test Notification distribution

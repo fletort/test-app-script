@@ -2,7 +2,9 @@
   "devDependencies": {
     "@types/google-apps-script": "^1.0.64",
     "clean-jsdoc-theme": "^4.2.10",
+    "commander": "^11.0.0",
     "coverage-badges-cli": "^1.1.1",
+    "globby": "^13.2.2",
     "jsdoc": "^4.0.2",
     "nyc": "^15.1.0",
     "replace": "^1.2.2"
@@ -10,7 +12,7 @@
   "scripts": {
     "test": "node ./ut/",
     "coverage": "nyc npm test",
-    "upload": "npx clasp push",
+    "upload": "cp -r src src.original && cp -r src src.original",
     "doc": "npx jsdoc -c .jsdoc.json"
   }
 }

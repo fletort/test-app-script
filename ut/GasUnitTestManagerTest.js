@@ -1,5 +1,7 @@
+// COMMENT THIS BLOCK IN GASP - START
 const { GasUnitTestManager } = require('../src/');
 const { GasUnitTestLoggerMock, GasUnitTest_HandlerMock, GasUnitTestContainerMock } = require('./GasUnitTestMock');
+// COMMENT THIS BLOCK IN GASP - END
 
 /**
  * Unit Test of GasUnitTestManager class

@@ -1,4 +1,6 @@
+// COMMENT THIS BLOCK IN GASP - START
 const { GasUnitTestInfo, GasUnitTestDefaultLogger, GasUnitTestContainer, GasUnitTestManager } = require('../src/');
+// COMMENT THIS BLOCK IN GASP - END
 
 /**
  * require libraries if the require method exists (outside GAS Mode)

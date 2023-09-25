@@ -1,6 +1,8 @@
+// COMMENT THIS BLOCK IN GASP - START
 //const { GasUnitTestContainer } = require("./GasUnitTestContainer"); Comme quoi c pas top de detecter le last element ici (pb depence cycliq,e ou virer le dafault logger du Notification Manager)
 const { GasUnitTestInfo } = require("./GasUnitTestInfo");
 const { IGasUnitTestNotification } = require("./IGasUnitTestNotification");
+// COMMENT THIS BLOCK IN GASP - END
 
 /**
  * Default Test Logger.

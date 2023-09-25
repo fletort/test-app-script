@@ -1,4 +1,6 @@
+// COMMENT THIS BLOCK IN GASP - START
 const { GasUnitTestInfo } = require("./GasUnitTestInfo");
+// COMMENT THIS BLOCK IN GASP - END
 
 /**
  * GasUnitTest Client Notification (Logger) Interface 

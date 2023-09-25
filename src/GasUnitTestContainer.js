@@ -1,7 +1,9 @@
+// COMMENT THIS BLOCK IN GASP - START
 const { IGasUnitTestNotification } = require("./IGasUnitTestNotification");
 const { GasUnitTest } = require("./GasUnitTest.js");
 const { GasUnitTestNotificationManager } = require("./GasUnitTestNotificationManager");
 const { GasUnitTestInfo } = require("./GasUnitTestInfo");
+// COMMENT THIS BLOCK IN GASP - END
 
 /**
  * Class that Contains test definitions or nested tests section.

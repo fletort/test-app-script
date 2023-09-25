@@ -1,6 +1,8 @@
+// COMMENT THIS BLOCK IN GASP - START
 const { GasUnitTestContainer } = require("./GasUnitTestContainer");
 const { GasUnitTestInfo } = require("./GasUnitTestInfo");
 const { GasUnitTestNotificationManager } = require("./GasUnitTestNotificationManager");
+// COMMENT THIS BLOCK IN GASP - END
 
 /**
  * Singleton classe uses to Manage all test campagn

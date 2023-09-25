@@ -1,4 +1,6 @@
+// COMMENT THIS BLOCK IN GASP - START
 const { GasUnitTest, GasUnitTestContainer } = require("../src");
+// COMMENT THIS BLOCK IN GASP - END
 
 class GasUnitTestLoggerMock {
   constructor() {
