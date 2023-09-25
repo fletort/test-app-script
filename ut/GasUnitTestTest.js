@@ -30,7 +30,7 @@ function GasUnitTestTest(testSuite) {
                               nbTestOkWaited = waitedStatus ? 1 : 0,
                               nbTestKoWaited = waitedStatus ? 0 : 1) {
     test.assert(
-      loggerMock.onAssertResultParameters.length == 1,
+      loggerMock.onAssertResultParameters.length == 2,
       `${testedMethod} result notification is received`
     );
     test.assert(
