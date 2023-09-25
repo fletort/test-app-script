@@ -28,7 +28,7 @@ jobs:
     - name: Download dependencies
       run: npm ci
     - name: Run Test
-      run: npm run coverage
+      run: npm run test
     - name: Create Coverage Badge
       run: npx coverage-badges --output coverage/badges.svg
     - name: Upload Coverage Info
