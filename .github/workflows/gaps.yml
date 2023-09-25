@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-    # Test job
+    # Push to GASP
     push_to_gasp:
       runs-on: ubuntu-latest
       steps:
@@ -30,3 +30,20 @@ jobs:
       - name: Push script to scripts.google.com
         id: clasp-push
         run: node push.mjs push
+    # Test on GASP
+    test_on_gasp:
+      runs-on: ubuntu-latest
+      needs: [push_to_gasp]
+      steps:
+      - uses: actions/checkout@v3
+      - uses: namaggarwal/clasp-token-action@v0.0.1
+        with:
+            client-id: ${{ secrets.GAPS_CLIENT_ID }}
+            client-secret: ${{ secrets.GAPS_CLIENT_SECRET }}
+            refresh-token: ${{ secrets.GAPS_REFRESH_TOKEN }}
+      - name: Install clasp
+        id: install-clasp
+        run: sudo npm install @google/clasp -g
+      - name: Run Test on GASP
+        id: clasp-run
+        run: clasp run runTestSuite
