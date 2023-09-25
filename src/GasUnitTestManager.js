@@ -22,7 +22,9 @@ class GasUnitTestManager extends GasUnitTestInfo {
 
     // use for dependency injection (test purpose) 
     this.exitOnError = (code) => { 
-      if (typeof ScriptApp == 'undefined') {
+      if (typeof ScriptApp !== 'undefined') {
+        throw new Error("TestSuite KO");
+      } else {
         process.exit(code); 
       }
     };
