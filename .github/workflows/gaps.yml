@@ -17,11 +17,16 @@ jobs:
             client-id: ${{ secrets.GAPS_CLIENT_ID }}
             client-secret: ${{ secrets.GAPS_CLIENT_SECRET }}
             refresh-token: ${{ secrets.GAPS_REFRESH_TOKEN }}
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - name: Download dependencies
+        run: npm ci
       - name: Install clasp
         id: install-clasp
         run: sudo npm install @google/clasp -g
-      - name: Download dependencies
-        run: npm ci
       - name: Push script to scripts.google.com
         id: clasp-push
-        run: node .\push.mjs push
+        run: node push.mjs push
