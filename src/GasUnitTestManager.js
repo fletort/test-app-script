@@ -22,7 +22,9 @@ class GasUnitTestManager extends GasUnitTestInfo {
 
     // use for dependency injection (test purpose) 
     this.exitOnError = (code) => { 
-      process.exit(code) 
+      if (typeof ScriptApp == 'undefined') {
+        process.exit(code); 
+      }
     };
   }
 
@@ -59,7 +61,7 @@ class GasUnitTestManager extends GasUnitTestInfo {
     this.logger.OnAllTestEnd(this);
 
     if (!this.isOk()) {
-      //this.exitOnError(1);
+      this.exitOnError(1);
       return 1;
     }
 
