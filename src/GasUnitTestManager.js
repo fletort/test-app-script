@@ -59,7 +59,7 @@ class GasUnitTestManager extends GasUnitTestInfo {
     this.logger.OnAllTestEnd(this);
 
     if (!this.isOk()) {
-      this.exitOnError(1);
+      //this.exitOnError(1);
       return 1;
     }
 
