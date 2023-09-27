@@ -4,7 +4,6 @@
     "clean-jsdoc-theme": "^4.2.10",
     "commander": "^11.0.0",
     "coverage-badges-cli": "^1.1.1",
-    "fs-extra": "^11.1.1",
     "globby": "^13.2.2",
     "jsdoc": "^4.0.2",
     "nyc": "^15.1.0",
