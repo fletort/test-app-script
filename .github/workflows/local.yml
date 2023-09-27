@@ -16,7 +16,7 @@ permissions:
 
 
 jobs:
-  call-workflow-passing-data:
+  test_local:
     uses: fletort/test-app-script/.github/workflows/test_local.yml@develop
   # doc job
   generate_doc:
