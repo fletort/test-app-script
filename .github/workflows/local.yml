@@ -8,11 +8,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+
 
 
 jobs:
@@ -25,6 +21,11 @@ jobs:
 
   # Deployment doc & testresult
   deploy_doc:
+    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     uses: fletort/test-app-script/.github/workflows/model_deploy_doc.yml@develop
     needs: [test_local, generate_doc]
     if: github.ref == 'refs/heads/develop'
