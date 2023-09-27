@@ -48,6 +48,7 @@ jobs:
     #   run: clasp run runTestSuite
   test_on_gasp:
     if: ${{ inputs.launch_test }}
+    needs: [push_to_gasp]
     runs-on: ubuntu-latest
     steps:
       - run: echo "YO"
