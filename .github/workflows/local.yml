@@ -47,7 +47,7 @@ jobs:
       name: github-pages
       url: ${{steps.deployment.outputs.page_url}}
     runs-on: ubuntu-latest
-    needs: [test, generate_doc]
+    needs: [test_local, generate_doc]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Get Docs content
