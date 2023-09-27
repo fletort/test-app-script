@@ -12,8 +12,9 @@
   "scripts": {
     "test": "node ./ut/",
     "coverage": "nyc npm test",
-    "push": "node ./push.mjs push",
-    "pull": "node ./push.mjs pull",
+    "coverage_badge": "npx coverage-badges --output coverage/badges.svg",
+    "push": "node ./myclasp.mjs push",
+    "pull": "node ./myclasp.mjs pull",
     "doc": "npx jsdoc -c .jsdoc.json"
   }
 }

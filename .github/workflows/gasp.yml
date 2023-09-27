@@ -34,7 +34,7 @@ jobs:
         run: sudo npm install @google/clasp -g
       - name: Push script to scripts.google.com
         id: clasp-push
-        run: node push.mjs push
+        run: npm run gasp_push
       - name: Run Test on GASP
         id: clasp-run
         run: clasp run runTestSuite

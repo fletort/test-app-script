@@ -1,0 +1,33 @@
+name: AppScript local test Reusable Workflow
+on:
+  workflow_call:
+    inputs:
+      generate_badge:
+        type: boolean
+        default: true
+        description: "Generate the svg coverage badge"
+
+
+jobs:
+  test_local:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - name: Download dependencies with npm ci
+        run: npm ci
+      - name: Run Test and Report Coverage
+        run: npm run coverage
+      - name: Create Coverage Badge
+        if: ${{ inputs.generate_badge }}
+        run: npm run coverage_badge
+      - name: Keep Coverage Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: './coverage'
+          retention-days: 1

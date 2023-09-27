@@ -1,4 +1,4 @@
-name: Release
+name: Local CI
 
 on:
   push:
@@ -14,30 +14,10 @@ permissions:
   pages: write
   id-token: write
 
-jobs:
-  # Test job
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
-        cache: 'npm'
-    - name: Download dependencies
-      run: npm ci
-    - name: Run Test
-      run: npm run coverage
-    - name: Create Coverage Badge
-      run: npx coverage-badges --output coverage/badges.svg
-    - name: Upload Coverage Info
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage
-        path: './coverage'
-        retention-days: 1
 
+jobs:
+  call-workflow-passing-data:
+    uses: fletort/test-app-script/.github/workflows/test_local.yml@develop
   # doc job
   generate_doc:
     runs-on: ubuntu-latest
@@ -54,7 +34,7 @@ jobs:
         run: npm ci
       - name: Build JsDoc
         run: npm run doc
-      - name: Upload Doc
+      - name: Keep Generated Doc
         uses: actions/upload-artifact@v3
         with:
           name: docs
