@@ -17,29 +17,11 @@ permissions:
 
 jobs:
   test_local:
-    uses: fletort/test-app-script/.github/workflows/test_local.yml@develop
+    uses: fletort/test-app-script/.github/workflows/model_test_local.yml@develop
   # doc job
   generate_doc:
-    runs-on: ubuntu-latest
+    uses: fletort/test-app-script/.github/workflows/model_doc.yml@develop
     if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          cache: 'npm'
-      - name: Download dependencies
-        run: npm ci
-      - name: Build JsDoc
-        run: npm run doc
-      - name: Keep Generated Doc
-        uses: actions/upload-artifact@v3
-        with:
-          name: docs
-          path: './docs'
-          retention-days: 1
 
   # Deployment doc & testresult
   deploy_doc:

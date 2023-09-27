@@ -1,0 +1,25 @@
+name: AppScript JsDoc generation Reusable Workflow
+on:
+  workflow_call:
+
+jobs:
+  generate_doc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - name: Download dependencies
+        run: npm ci
+      - name: Build JsDoc
+        run: npm run doc
+      - name: Keep Generated Doc
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs
+          path: './docs'
+          retention-days: 1
