@@ -20,37 +20,14 @@ jobs:
     uses: fletort/test-app-script/.github/workflows/model_test_local.yml@develop
   # doc job
   generate_doc:
-    uses: fletort/test-app-script/.github/workflows/model_doc.yml@develop
+    uses: fletort/test-app-script/.github/workflows/model_generate_doc.yml@develop
     if: github.ref == 'refs/heads/develop'
 
   # Deployment doc & testresult
   deploy_doc:
-    environment:
-      name: github-pages
-      url: ${{steps.deployment.outputs.page_url}}
-    runs-on: ubuntu-latest
+    uses: fletort/test-app-script/.github/workflows/model_deploy_doc.yml@develop
     needs: [test_local, generate_doc]
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Get Docs content
-        uses: actions/download-artifact@v3
-        with:
-          name: docs
-          path: './'
-      - name: Get Test Coverage Report content
-        uses: actions/download-artifact@v3
-        with:
-          name: coverage
-          path: './coverage'
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: './'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+    if: github.ref == 'refs/heads/develop'
+
 
   

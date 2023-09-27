@@ -1,0 +1,31 @@
+name: AppScript Deploy Doc and Coverage info Workflow
+on:
+  workflow_call:
+
+jobs:
+  deploy_doc:
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Docs content
+        uses: actions/download-artifact@v3
+        with:
+          name: docs
+          path: './'
+      - name: Get Test Coverage Report content
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage
+          path: './coverage'
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
