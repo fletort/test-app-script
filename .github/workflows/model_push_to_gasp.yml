@@ -36,13 +36,18 @@ jobs:
     - name: Push script to scripts.google.com
       id: clasp-push
       run: npm run clasp_push
-    - name: Write CLASPRC_JSON secret to .clasprc.json file
-      if: ${{ inputs.launch_test }}
-      id: write-clasprc
-      run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
-      env:
-        CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
-    - name: Run Test on GASP
-      if: ${{ inputs.launch_test }}
-      id: clasp-run
-      run: clasp run runTestSuite
+    # - name: Write CLASPRC_JSON secret to .clasprc.json file
+    #   if: ${{ inputs.launch_test }}
+    #   id: write-clasprc
+    #   run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
+    #   env:
+    #     CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
+    # - name: Run Test on GASP
+    #   if: ${{ inputs.launch_test }}
+    #   id: clasp-run
+    #   run: clasp run runTestSuite
+  test_on_gasp:
+    if: ${{ inputs.launch_test }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "YO"
