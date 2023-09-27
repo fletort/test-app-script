@@ -9,8 +9,6 @@ on:
   workflow_dispatch:
 
 
-
-
 jobs:
   test_local:
     uses: fletort/test-app-script/.github/workflows/model_test_local.yml@develop

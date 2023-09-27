@@ -7,41 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
+  push_to_gasp:
+    uses: fletort/test-app-script/.github/workflows/model_push_to_gasp.yml@develop
     # Push to GASP
-    push_to_gasp:
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v3
-      - uses: namaggarwal/clasp-token-action@v0.0.1
-        with:
-            client-id: ${{ secrets.GASP_CLIENT_ID }}
-            client-secret: ${{ secrets.GASP_CLIENT_SECRET }}
-            refresh-token: ${{ secrets.GASP_REFRESH_TOKEN }}
-      - name: Write CLASPRC_JSON secret to .clasprc.json file
-        id: write-clasprc
-        run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
-        env:
-          CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}  
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          cache: 'npm'
-      - name: Download dependencies
-        run: npm ci
-      - name: Install clasp
-        id: install-clasp
-        run: sudo npm install @google/clasp -g
-      - name: Push script to scripts.google.com
-        id: clasp-push
-        run: npm run gasp_push
-      - name: Run Test on GASP
-        id: clasp-run
-        run: clasp run runTestSuite
-    # Test on GASP
-    # test_on_gasp:
+    # push_to_gasp:
     #   runs-on: ubuntu-latest
-    #   needs: [push_to_gasp]
     #   steps:
     #   - uses: actions/checkout@v3
     #   - uses: namaggarwal/clasp-token-action@v0.0.1
@@ -49,9 +19,24 @@ jobs:
     #         client-id: ${{ secrets.GASP_CLIENT_ID }}
     #         client-secret: ${{ secrets.GASP_CLIENT_SECRET }}
     #         refresh-token: ${{ secrets.GASP_REFRESH_TOKEN }}
+    #   - name: Write CLASPRC_JSON secret to .clasprc.json file
+    #     id: write-clasprc
+    #     run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
+    #     env:
+    #       CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}  
+    #   - name: Use Node.js
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       node-version: '18.x'
+    #       cache: 'npm'
+    #   - name: Download dependencies
+    #     run: npm ci
     #   - name: Install clasp
     #     id: install-clasp
     #     run: sudo npm install @google/clasp -g
+    #   - name: Push script to scripts.google.com
+    #     id: clasp-push
+    #     run: npm run gasp_push
     #   - name: Run Test on GASP
     #     id: clasp-run
     #     run: clasp run runTestSuite

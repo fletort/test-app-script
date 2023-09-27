@@ -13,8 +13,8 @@
     "test": "node ./ut/",
     "coverage": "nyc npm test",
     "coverage_badge": "npx coverage-badges --output coverage/badges.svg",
-    "push": "node ./myclasp.mjs push",
-    "pull": "node ./myclasp.mjs pull",
+    "clasp_push": "node ./myclasp.mjs push",
+    "clasp_pull": "node ./myclasp.mjs pull",
     "doc": "npx jsdoc -c .jsdoc.json"
   }
 }

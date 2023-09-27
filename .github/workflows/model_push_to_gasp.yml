@@ -1,0 +1,46 @@
+name: AppScript online gasp ide push and Test Reusable Workflow
+on:
+  workflow_call:
+    inputs:
+      launch_test:
+        type: boolean
+        default: false
+
+    secrets:
+      GASP_CLIENT_ID:
+        required: true
+        description: oauth2ClientSettings.clientId from global .clasprc.json file (located in your home directory)
+      GASP_CLIENT_SECRET:
+        required: true
+        description: oauth2ClientSettings.clientSecret from global .clasprc.json file (located in your home directory)
+      GASP_REFRESH_TOKEN:
+        required: true
+        description: token.refresh_token from global .clasprc.json file (located in your home directory)
+      CLASPRC_JSON:
+        required: false
+jobs:
+  push_to_gasp:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: namaggarwal/clasp-token-action@v0.0.1
+      with:
+          client-id: ${{ secrets.GASP_CLIENT_ID }}
+          client-secret: ${{ secrets.GASP_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.GASP_REFRESH_TOKEN }}
+    - name: Install clasp
+      id: install-clasp
+      run: sudo npm install @google/clasp -g
+    - name: Push script to scripts.google.com
+      id: clasp-push
+      run: npm run clasp_push
+    - name: Write CLASPRC_JSON secret to .clasprc.json file
+      if: ${{ inputs.launch_test }}
+      id: write-clasprc
+      run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
+      env:
+        CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
+    - name: Run Test on GASP
+      if: ${{ inputs.launch_test }}
+      id: clasp-run
+      run: clasp run runTestSuite
