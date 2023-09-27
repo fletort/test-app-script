@@ -21,7 +21,7 @@ jobs:
   # doc job
   generate_doc:
     uses: fletort/test-app-script/.github/workflows/model_doc.yml@develop
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/develop'
 
   # Deployment doc & testresult
   deploy_doc:
