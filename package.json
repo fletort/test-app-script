@@ -12,7 +12,8 @@
   "scripts": {
     "test": "node ./ut/",
     "coverage": "nyc npm test",
-    "upload": "cp -r src src.original && cp -r src src.original",
+    "push": "node ./push.mjs push",
+    "pull": "node ./push.mjs pull",
     "doc": "npx jsdoc -c .jsdoc.json"
   }
 }
