@@ -77,7 +77,7 @@ jobs:
       # - name: Push script to scripts.google.com
       #   id: clasp-push
       #   run: npm run clasp_push
-      - name: Write CLASPRC_JSON secret to .clasprc.json file
+      - name: Write CLASPRC_JSON secretttt to .clasprc.json file
         id: write-clasprc
         run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
         env:
