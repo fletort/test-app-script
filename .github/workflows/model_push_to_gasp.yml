@@ -17,13 +17,13 @@ on:
         required: true
         description: token.refresh_token from global .clasprc.json file (located in your home directory)
       GCP_GASP_CLIENT_ID:
-        required: true
+        required: false
         description: oauth2ClientSettings.clientId from local .clasprc.json file (located in your project directory)
       GCP_GASP_CLIENT_SECRET:
-        required: true
+        required: false
         description: oauth2ClientSettings.clientSecret from local .clasprc.json file (located in your project directory)
       GCP_GASP_REFRESH_TOKEN:
-        required: true
+        required: false
         description: token.refresh_token from local .clasprc.json file (located in your project directory)
       CLASPRC_JSON:
         required: false
@@ -71,12 +71,17 @@ jobs:
       - name: Install clasp
         id: install-clasp
         run: sudo npm install @google/clasp -g
-      - uses: actions/checkout@v3 # only for .clasp.json file !
-      - name: Download dependencies with npm ci  # For the myclasp script dependencies, TODO release it in npm
-        run: npm ci
-      - name: Push script to scripts.google.com
-        id: clasp-push
-        run: npm run clasp_push
+      # - uses: actions/checkout@v3 # only for .clasp.json file !
+      # - name: Download dependencies with npm ci  # For the myclasp script dependencies, TODO release it in npm
+      #   run: npm ci
+      # - name: Push script to scripts.google.com
+      #   id: clasp-push
+      #   run: npm run clasp_push
+      - name: Write CLASPRC_JSON secret to .clasprc.json file
+        id: write-clasprc
+        run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
+        env:
+          CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}  
       - name: Run Test on GASP environement
         if: ${{ inputs.launch_test }}
         id: clasp-run
