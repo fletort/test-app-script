@@ -60,7 +60,6 @@ jobs:
     needs: [push_to_gasp]
     runs-on: ubuntu-latest
     steps:
-      - run: rm .clasprc.json
       - uses: fletort/clasp-tokens-action@v1.0.0-alpha
         with:
           client-id: ${{ secrets.GASP_CLIENT_ID }}
