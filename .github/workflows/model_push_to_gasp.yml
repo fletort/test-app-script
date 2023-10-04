@@ -78,12 +78,12 @@ jobs:
       # - name: Push script to scripts.google.com
       #   id: clasp-push
       #   run: npm run clasp_push
-      # - name: Write CLASPRC_JSON secretttt to .clasprc.json file
-      #   id: write-clasprc
-      #   run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
-      #   env:
-      #     CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
-      # - run: cat ./.clasprc.json 
+      - name: Write CLASPRC_JSON secretttt to .clasprc.json file
+        id: write-clasprc
+        run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
+        env:
+          CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
+      - run: cat ./.clasprc.json 
       - name: Run Test on GASP environement
         if: ${{ inputs.launch_test }}
         id: clasp-run
