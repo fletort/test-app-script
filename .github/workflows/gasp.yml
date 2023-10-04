@@ -10,6 +10,9 @@ jobs:
   push_to_gasp:
     uses: fletort/test-app-script/.github/workflows/model_push_to_gasp.yml@develop
     secrets: inherit
+    with: 
+      launch_test: true
+      
     # Push to GASP
     # push_to_gasp:
     #   runs-on: ubuntu-latest
