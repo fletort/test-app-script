@@ -69,7 +69,7 @@ jobs:
           gcp-client-id: ${{ secrets.GCP_GASP_CLIENT_ID }}
           gcp-client-secret: ${{ secrets.GCP_GASP_CLIENT_SECRET }}
           gcp-refresh-token: ${{ secrets.GCP_GASP_REFRESH_TOKEN }}
-      - run: echo "\n" >> .clasprc.json
+      - run: echo "" >> .clasprc.json
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
