@@ -68,6 +68,7 @@ jobs:
           gcp-client-id: ${{ secrets.GCP_GASP_CLIENT_ID }}
           gcp-client-secret: ${{ secrets.GCP_GASP_CLIENT_SECRET }}
           gcp-refresh-token: ${{ secrets.GCP_GASP_REFRESH_TOKEN }}
+      - run: echo "\n" > .clasprc.json
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
@@ -82,16 +83,16 @@ jobs:
       # - name: Push script to scripts.google.com
       #   id: clasp-push
       #   run: npm run clasp_push
-      - name: Write CLASPRC_JSON secretttt to .clasprc.json file
-        id: write-clasprc
-        run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
-        env:
-          CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: from_last_write
-          path: ./.clasprc.json 
+      # - name: Write CLASPRC_JSON secretttt to .clasprc.json file
+      #   id: write-clasprc
+      #   run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
+      #   env:
+      #     CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: from_last_write
+      #     path: ./.clasprc.json 
       - name: Run Test on GASP environement
         if: ${{ inputs.launch_test }}
         id: clasp-run
