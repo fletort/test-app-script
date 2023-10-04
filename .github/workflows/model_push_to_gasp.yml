@@ -72,6 +72,9 @@ jobs:
         id: install-clasp
         run: sudo npm install @google/clasp -g
       - uses: actions/checkout@v3 # only for .clasp.json file !
+      - name: Push script to scripts.google.com
+        id: clasp-push
+        run: npm run clasp_push
       - name: Run Test on GASP environement
         if: ${{ inputs.launch_test }}
         id: clasp-run
