@@ -71,7 +71,7 @@ jobs:
       - name: Install clasp
         id: install-clasp
         run: sudo npm install @google/clasp -g
-      # - uses: actions/checkout@v3 # only for .clasp.json file !
+      - uses: actions/checkout@v3 # only for .clasp.json file !
       # - name: Download dependencies with npm ci  # For the myclasp script dependencies, TODO release it in npm
       #   run: npm ci
       # - name: Push script to scripts.google.com
