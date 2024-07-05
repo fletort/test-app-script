@@ -6,7 +6,6 @@ on:
         type: boolean
         default: false
 
-        
     secrets:
       GASP_CLIENT_ID:
         required: true
@@ -33,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: fletort/clasp-tokens-action@v1.0.0-alpha
+    - uses: fletort/clasp-tokens-action@v1.0.0
       with:
         client-id: ${{ secrets.GASP_CLIENT_ID }}
         client-secret: ${{ secrets.GASP_CLIENT_SECRET }}
