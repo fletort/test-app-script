@@ -45,16 +45,6 @@ jobs:
     - name: Push script to scripts.google.com
       id: clasp-push
       run: npm run clasp_push
-    # - name: Write CLASPRC_JSON secret to .clasprc.json file
-    #   if: ${{ inputs.launch_test }}
-    #   id: write-clasprc
-    #   run: echo "$CLASPRC_JSON_SECRET" >> .clasprc.json
-    #   env:
-    #     CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
-    # - name: Run Test on GASP
-    #   if: ${{ inputs.launch_test }}
-    #   id: clasp-run
-    #   run: clasp run runTestSuite
   test_on_gasp:
     if: ${{ inputs.launch_test }}
     needs: [push_to_gasp]
@@ -69,30 +59,9 @@ jobs:
           gcp-client-id: ${{ secrets.GCP_GASP_CLIENT_ID }}
           gcp-client-secret: ${{ secrets.GCP_GASP_CLIENT_SECRET }}
           gcp-refresh-token: ${{ secrets.GCP_GASP_REFRESH_TOKEN }}
-      - run: echo "" >> .clasprc.json
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: from_action
-          path: .clasprc.json 
       - name: Install clasp
         id: install-clasp
         run: sudo npm install @google/clasp -g
-      # - name: Download dependencies with npm ci  # For the myclasp script dependencies, TODO release it in npm
-      #   run: npm ci
-      # - name: Push script to scripts.google.com
-      #   id: clasp-push
-      #   run: npm run clasp_push
-      # - name: Write CLASPRC_JSON secretttt to .clasprc.json file
-      #   id: write-clasprc
-      #   run: echo "$CLASPRC_JSON_SECRET" > .clasprc.json
-      #   env:
-      #     CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
-      # - name: Upload artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: from_last_write
-      #     path: ./.clasprc.json 
       - name: Run Test on GASP environement
         if: ${{ inputs.launch_test }}
         id: clasp-run
